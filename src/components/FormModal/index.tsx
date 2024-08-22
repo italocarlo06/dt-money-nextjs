@@ -9,8 +9,11 @@ import {
   useWatch,
 } from 'react-hook-form';
 
-let transactionSchema = object({
-  title: string().required('O campo título é obrigatório'),
+// Validação do formulário
+const transactionSchema = object({
+  title: string()
+    .required('O campo título é obrigatório')
+    .min(5, 'O título deve ter no mínimo 5 caracteres'),
   type: string()
     .oneOf(['income', 'outcome'], 'O campo tipo deve ser "income" ou "outcome"')
     .required('O campo tipo é obrigatório'),
@@ -19,13 +22,13 @@ let transactionSchema = object({
   data: date().default(() => new Date()),
 })
 
+// Valores padrão do formulário
 const transactionDefaultValues: ITransaction = {
   title: '',
   type: 'income',
   price: 0,
   category: '',
   data: new Date()
-
 }
 
 export interface IFormModalProps {
@@ -41,7 +44,7 @@ export function FormModal({formTitle, closeModal, AddTransaction}: IFormModalPro
     handleSubmit,
     setValue,
     control,
-    formState: { isSubmitting, errors } } = useForm<ITransaction>({
+    formState: { errors } } = useForm<ITransaction>({
         defaultValues: transactionDefaultValues,
         resolver: yupResolver(transactionSchema)
     });
@@ -52,7 +55,7 @@ export function FormModal({formTitle, closeModal, AddTransaction}: IFormModalPro
       closeModal();
     }
 
-    const handleChangeTitle = (type: "income" | "outcome") => {
+    const handleChangeType = (type: "income" | "outcome") => {
       setValue("type", type);
     }
 
@@ -62,6 +65,7 @@ export function FormModal({formTitle, closeModal, AddTransaction}: IFormModalPro
       name: 'type',
       defaultValue: 'income', // valor padrão, se necessário
     });
+
     return (
         <div className="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true"> 
   <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
@@ -84,12 +88,12 @@ export function FormModal({formTitle, closeModal, AddTransaction}: IFormModalPro
             </div>
           </div>
         </div>
-        <form className="flex flex-col gap-4 px-12 mt-4 mb-6" onSubmit={handleSubmit(onSubmit)}>
+        <form className="flex flex-col gap-4 px-12 mt-4 mb-6" onSubmit={handleSubmit(onSubmit)}>            
             <Controller
               name="title"
               control={control}
               render={({ field }) => (
-              <Input type="text" placeholder="Título" {...field} />
+                <Input type="text" placeholder="Título" {...field} />
               )}
             />
             {errors.title && <span className="text-red-500 text-sm">{errors.title?.message}</span>}
@@ -101,7 +105,7 @@ export function FormModal({formTitle, closeModal, AddTransaction}: IFormModalPro
               )}
             />            
             {errors.price && <span className="text-red-500 text-sm">{errors.price?.message}</span>}
-            <TransactionSwitcher setType={handleChangeTitle} type={type}/>
+            <TransactionSwitcher setType={handleChangeType} type={type}/>
             {errors.type && <span className="text-red-500 text-sm">{errors.type?.message}</span>}
             <Controller
               name="category"
