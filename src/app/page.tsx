@@ -4,26 +4,10 @@ import { Header } from "@/components/Header";
 import { BodyContainer } from "@/components/BodyContainer";
 import { ITransaction } from "@/types/transaction";
 import { Table } from "@/components/Table";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FormModal } from "@/components/FormModal";
 import { useTransaction } from "@/hooks/useTransaction";
 
-const oldTransactions: ITransaction[] = [
-  {
-    title: "Desenvolvimento de site",
-    price: 1200,
-    category: "Desenvolvimento",
-    data: new Date(),
-    type: "income"
-  },
-  {
-    title: "Hamburguer",
-    price: 50,
-    category: "Alimentação",
-    data: new Date(),
-    type: "outcome"
-  }
-]
 
 export interface ITotal {
   totalIncome: number 
