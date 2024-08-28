@@ -72,7 +72,7 @@ export async function TransactionReport({
 
         tables.push([
           {
-            text: `Category: ${category}`,
+            text: `Categoria: ${category}`,
             style: 'subtitle'
           },
           {
