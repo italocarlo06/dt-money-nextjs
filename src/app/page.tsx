@@ -31,7 +31,7 @@ export default function Home() {
   }
 
   useEffect(() => {
-    const totals = transactions?.reduce((acc, transaction) => {
+    const totals = transactions?.reduce((acc: { totalIncome: number; total: number; totalOutcome: number; }, transaction: { type: string; price: number; }) => {
       if (transaction.type === 'income') {
         acc.totalIncome += transaction.price;
         acc.total += transaction.price;
