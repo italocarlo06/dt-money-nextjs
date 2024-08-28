@@ -2,6 +2,7 @@ import { TransactionReport } from "@/app/reports/TransactionReport";
 import { useTransaction } from "@/hooks/useTransaction";
 import Image from "next/image";
 import { PrinterIcon } from '@heroicons/react/24/outline'
+import { ApiTransaction } from "@/app/services/transaction";
 
 
 export interface IHeaderProps {    
@@ -9,16 +10,15 @@ export interface IHeaderProps {
 }
 
 export function Header({openModal}: IHeaderProps) {
-    const { data: transactions, isLoading } = useTransaction.ListAll();    
 
     const handlePrint = async () => {
-        if (!isLoading){
-            await TransactionReport({
-                data: transactions ?? [],
-                mode: 'save',
-                filtros: {}
-            })
-        }
+        const dataTransactions = await ApiTransaction.listAll();
+        await TransactionReport({
+            data: dataTransactions ?? [],
+            mode: 'save',
+            filtros: {}
+        })
+        
     }
 
     return (
