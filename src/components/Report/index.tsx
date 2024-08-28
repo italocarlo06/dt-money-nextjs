@@ -3,10 +3,10 @@ import {
     PageOrientation,
     TDocumentDefinitions
   } from 'pdfmake/interfaces'
-  import { format } from 'date-fns'
-  import { vfs } from './utils/fonts'
-  import pdfMake from 'pdfmake/build/pdfmake'
-  import logoReportImg from '../../../public/images/logo.png'
+import { format } from 'date-fns'
+import { vfs } from './utils/fonts'
+import pdfMake from 'pdfmake/build/pdfmake'
+import logoReportImg from '../../../public/images/logo.png'
 import { toDataURL } from './utils'
     
   
@@ -21,8 +21,7 @@ import { toDataURL } from './utils'
     }
   }
   
-  type TemplateReportProps = {
-    id_usuario: string
+  type TemplateReportProps = {    
     pageOrientation?: PageOrientation | undefined
     reportTitle: string
     content: Content
@@ -31,8 +30,7 @@ import { toDataURL } from './utils'
     mode?: 'open' | 'save'
   }
   
-  export async function TemplateReport({
-    id_usuario,
+  export async function TemplateReport({    
     reportTitle,
     content,
     summary,
@@ -41,7 +39,7 @@ import { toDataURL } from './utils'
     pageOrientation = 'portrait'
   }: TemplateReportProps) {    
           
-    const logoReport = String(await toDataURL(logoReportImg))
+    const logoReport = String(await toDataURL('/images/logo-report.png'))
   
     const empresaData = {
         cnpj: '00.000.000/0000-00',
@@ -71,9 +69,7 @@ import { toDataURL } from './utils'
       {
         columns: [
           {
-            image: logoReport,
-            // width: 192,
-            // height: 108,
+            image: logoReport,      
             width: 118,
             height: 86,
             style: 'logo'
@@ -88,20 +84,14 @@ import { toDataURL } from './utils'
   
     const reportInfo = () => {
       return {
-        columns: [
-          {
-            qr: 'https://easydoc.xsolutionti.com.br/',
-            fit: 140,
-            width: '22%'
-          },
+        columns: [          
           [
             {
               text: filterText,
               style: 'filterText'
             }
           ]
-        ],
-        style: 'qrcode'
+        ]        
       }
     }
   
@@ -252,13 +242,6 @@ import { toDataURL } from './utils'
         line: {
           alignment: 'center',
           margin: [0, 30, 0, 0]
-        },
-        assinatura: {
-          alignment: 'center',
-          fontSize: 10
-        },
-        qrcode: {
-          margin: [0, 8, 0, 0]
         },
         columnTitle: {
           fontSize: 10,

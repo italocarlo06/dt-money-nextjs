@@ -5,7 +5,6 @@ import { groupByField, iterateGroupedData } from '@/components/Report/utils'
 import { TemplateReport } from '@/components/Report'
 
 type Props = {
-  id_usuario: string
   data: ITransaction[]
   filtros: {    
     data_inicio?: Date
@@ -14,8 +13,7 @@ type Props = {
   mode?: 'open' | 'save'
 }
 
-export async function TransactionReport({
-  id_usuario,
+export async function TransactionReport({  
   data,
   filtros,
   mode
@@ -52,12 +50,21 @@ export async function TransactionReport({
           ]
         ]
 
+    
+
         transactions.forEach((transaction) => {
+          const type = transaction.type === 'income' ? 'Entrada' : 'Saída'
+
+          const formattedPrice = new Intl.NumberFormat('pt-BR', {
+          style: 'currency',
+          currency: 'BRL',
+          minimumFractionDigits: 2,
+          }).format(transaction.price);
           const row = [
             { text: transaction.title, style: 'row' },
             { text: format(new Date(transaction.data), 'dd/MM/yyyy'), style: 'row' },
-            { text: transaction.price, style: 'row' },
-            { text: transaction.type, style: 'row' },                                    
+            { text: formattedPrice, style: 'row' },
+            { text: type, style: 'row' },                                    
           ]
 
           rows.push(row as any)
@@ -70,7 +77,7 @@ export async function TransactionReport({
           },
           {
             table: {
-              widths: [80, '*', 100, 80, 125, 55, 40],
+              widths: ['*', 100, 100, 100],
               headerRows: 1,
               body: rows
             }
@@ -88,11 +95,10 @@ export async function TransactionReport({
   }
 
   await TemplateReport({
-    id_usuario,
     content: transacoesPorCategoriaTable(),
     filterText: await filterReportText(),
     reportTitle: 'Transações por categoria',
-    pageOrientation: 'landscape',
+    pageOrientation: 'portrait',
     mode
   })
 }
